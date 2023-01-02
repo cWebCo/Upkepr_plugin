@@ -1,0 +1,325 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.upkeprSettingMain {
+    max-width: 1100px;
+    background: #d9d9d9;
+    border-radius: 20px;
+    margin: 50px auto 0;
+    padding: 40px;
+}
+
+.usMainTitle {
+    font-size: 24px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #999;
+}
+
+.usMainSection {
+    display: flex;
+    margin-top: 20px;
+}
+
+.usmsLeft {
+    width: calc(100% - 320px);
+    padding-right: 50px;
+}
+
+.usmsRight {
+    width: 320px;
+}
+
+.usmsLeft img.logoMain {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.usmsLeft h3 {
+    text-align: center;
+    font-weight: 400;
+    font-size: 25px;
+    text-transform: uppercase;
+    color: #3a3a3a;
+}
+
+.usmsInput {
+    position: relative;
+    text-align: center;
+}
+
+.usmsInput input {
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: none;
+    font-size: 18px;
+    padding: 10px 20px;
+}
+
+.usmsInput .usmsCopyIcon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+
+.usmsInput .usmsCopyIcon {
+    position: absolute;
+    right: 17px;
+    top: 18px;
+    cursor: pointer;
+}
+
+.usmsInput span.usmsHelpText {
+    color: #666;
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 19px;
+}
+
+.usButton {
+    background: #cf1d05;
+    font-size: 16px;
+    padding: 20px 40px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    display: inline-block;
+    border-radius: 10px;
+    border: none;
+    margin-top: 50px;
+    text-decoration: none;
+}
+
+.usButton:hover {
+    background: #1c487b;
+}
+
+.usmsFooter {
+    text-align: right;
+}
+
+.usInfoList {
+    border-radius: 15px;
+    background: #fff;
+    padding: 25px;
+}
+
+.usibTitle {
+    text-transform: uppercase;
+    color: #3a3a3a;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.usibContent {
+    font-size: 14px;
+    color: #999;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.usInfoList .usInfoBox:last-child .usibContent {
+    border-bottom: none;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.usInfoLinks {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.usInfoLinks a {
+    font-size: 18px;
+    display: block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #1c487b;
+    font-weight: 500;
+}
+
+.usInfoLinks a:hover {
+    text-decoration: underline;
+}
+
+.usInfoLinks a.usilRed {
+    text-decoration: underline;
+    color: #cf1d05;
+    font-size: 16px;
+}
+
+.usInfoLinks a.usilRed:hover {
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .usMainSection {
+        flex-direction: column;
+    }
+
+    .usmsLeft {
+        width: 100%;
+        padding-right: 0;
+    }
+
+    .usmsRight {
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .upkeprSettingMain {
+        padding: 20px;
+        margin: 15px;
+    }
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup {
+    margin: 250px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    transition: all .5s ease-in-out;
+}
+
+.popup h2 {
+    margin-top: 0;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+}
+
+.popup .close {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+.popup .close:hover {
+    color: #000;
+}
+
+.popup .content {
+    max-height: 30%;
+    overflow: auto;
+}
+
+.usButton strong {
+    display: block;
+    font-size: 28px;
+    font-weight: 400;
+}
+
+@media screen and (max-width: 700px) {
+    .popup {
+        width: 70%;
+    }
+}
+
+.popup {
+    background: #d9d9d9;
+    text-align: center;
+}
+
+.popup a.usButton {
+    margin-top: 20px;
+}
+
+
+.usMainTitle {
+    padding-bottom: 15px;
+}
+
+.usibContent {
+    font-size: 13px !important;
+}
+
+.usButton:hover {
+    background: #00c6ff !important;
+    color: #fff !important;
+}
+
+.usInfoLinks a {
+    color: #00c6ff !important;
+}
+
+.usmsInput span.usmsHelpText {
+    font-size: 16px;
+}
+
+.usmsLeft img.logoMain {
+    margin: 30px auto 60px !important;
+}
+
+.usInfoLinks a.usilRed:hover {
+    color: #00c6ff !important;
+}
+
+.upkeprSettingMain {
+    background: #888;
+    box-shadow: 0 0 0 10px rgb(0 0 0 / 10%);
+}
+
+.usmsLeft h3 {
+    color: #fff !important;
+}
+
+.usmsInput span.usmsHelpText {
+    color: #fff !important;
+}
+
+.usMainTitle {
+    color: #fff !important;
+}
+
+.usButton {
+    background: #222;
+    color: #fff;
+}
+
+.usInfoLinks a.usilRed {
+    color: #fff !important;
+}
+
+.cstm_messagebox
+{
+    display: none;
+    color: #00c6ff;
+    font-size: 22px;
+    margin-top: 7px;
+}
