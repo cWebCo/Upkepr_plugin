@@ -22,24 +22,31 @@
  */
 
 
-define('SECRET_KEY','upKeprSecret');  // secret key can be a random string  and keep in secret from anyone
-define('ALGORITHM','SHA256');
+define('UPKPR_SECRET_KEY','upKeprSecret');  // secret key can be a random string  and keep in secret from anyone
+define('UPKPR_ALGORITHM','SHA256');
+define( 'UPKPR_LICENSE', true );
 
 /* Use Domain as the folder name */
 $PluginTextDomain="upkepr-maintenance";
 
 
 /* Register Hooks For Start And Deactivate */
-register_activation_hook( __FILE__, 'cwebco_upkepr_on_activate_this_plugin' );
-register_deactivation_hook( __FILE__, 'cwebco_upkepr_on_deactivate_this_plugin' );
+register_activation_hook( __FILE__, 'UPKPR_upkepr_on_activate_this_plugin' );
+register_deactivation_hook( __FILE__, 'UPKPR_upkepr_on_deactivate_this_plugin' );
 
 /* Constant */
-define('CWEB_UPKEPR_FS_PATH1', plugin_dir_path(__FILE__) );
-define('CWEB_UPKEPR_WS_PATH1', plugin_dir_url(__FILE__) );
+define('UPKPR_UPKEPR_FS_PATH1', plugin_dir_path(__FILE__) );
+define('UPKPR_UPKEPR_WS_PATH1', plugin_dir_url(__FILE__) );
 
 
-if (!function_exists('cwebco_upkepr_on_activate_this_plugin')){
-function cwebco_upkepr_on_activate_this_plugin()
+function UPKPR_wpdocs_enqueue_custom_admin_style() {
+        wp_register_style( 'custom_wp_admin_css', UPKPR_UPKEPR_WS_PATH1 . 'css/style.css', false);
+        wp_enqueue_style( 'custom_wp_admin_css' );
+}
+add_action( 'admin_enqueue_scripts', 'UPKPR_wpdocs_enqueue_custom_admin_style' );
+
+if (!function_exists('UPKPR_upkepr_on_activate_this_plugin')){
+function UPKPR_upkepr_on_activate_this_plugin()
 {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()';
     $pass = array(); //remember to declare $pass as an array
@@ -59,8 +66,8 @@ function cwebco_upkepr_on_activate_this_plugin()
 }
 
 
-if (!function_exists('cwebco_upkepr_regenerate_key')){
-function cwebco_upkepr_regenerate_key()
+if (!function_exists('UPKPR_upkepr_regenerate_key')){
+function UPKPR_upkepr_regenerate_key()
 {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()';
     $pass = array(); //remember to declare $pass as an array
@@ -76,8 +83,8 @@ function cwebco_upkepr_regenerate_key()
 
 
 
-if (!function_exists('cwebco_upkepr_on_deactivate_this_plugin')){
-function cwebco_upkepr_on_deactivate_this_plugin()
+if (!function_exists('UPKPR_upkepr_on_deactivate_this_plugin')){
+function UPKPR_upkepr_on_deactivate_this_plugin()
 {
     // currently no action
 }
@@ -88,8 +95,8 @@ function cwebco_upkepr_on_deactivate_this_plugin()
 
 
 /* for admin pages */
-if (!function_exists('cwebcoupkepr_wp_admin_menu')){
-function cwebcoupkepr_wp_admin_menu() {
+if (!function_exists('UPKPR_upkepr_wp_admin_menu')){
+function UPKPR_upkepr_wp_admin_menu() {
 
     // Register the parent menu.
     $menu = add_menu_page(
@@ -97,28 +104,28 @@ function cwebcoupkepr_wp_admin_menu() {
         , __( 'upkepr Maintenance', $PluginTextDomain )
         , 'manage_options'
         , 'upkepr-Maintenance'
-        , 'cwebco_upekeper_display_my_menu'
+        , 'UPKPR_upekeper_display_my_menu'
     );
 }
 }
-add_action( 'admin_menu', 'cwebcoupkepr_wp_admin_menu' );
+add_action( 'admin_menu', 'UPKPR_upkepr_wp_admin_menu' );
 
 
-if (!function_exists('cwebco_upekeper_display_my_menu')){
-function cwebco_upekeper_display_my_menu()
+if (!function_exists('UPKPR_upekeper_display_my_menu')){
+function UPKPR_upekeper_display_my_menu()
 {
     global $PluginTextDomain;
     if (!current_user_can('read')) {
         wp_die(__('You do not have sufficient permissions to access this page.',$PluginTextDomain));
     } else {
         //include(CWEB_FS_PATH1 . 'admin/settings.php');
-        cwebco_upekeper_adminsettingspage();
+        UPKPR_upekeper_adminsettingspage();
     }
 }
 }
 
-if (!function_exists('cwebco_upekeper_adminsettingspage')){
-function cwebco_upekeper_adminsettingspage()
+if (!function_exists('UPKPR_upekeper_adminsettingspage')){
+function UPKPR_upekeper_adminsettingspage()
 {
     require plugin_dir_path( __FILE__ ) . 'adminpage.php';
 }   
@@ -131,45 +138,45 @@ add_action('rest_api_init', function ()
     /* to check if key is valid */
     register_rest_route( 'upkepr-isKeyValid', 'key',array(
     'methods' => 'POST',
-    'callback' => 'cwebco_upkepr_isKeyValid'
+    'callback' => 'UPKPR_upkepr_isKeyValid'
     ));
 
     /* to check if key, domain and username is valid */
     register_rest_route( 'upkepr-is_keydomainusername_valid', 'data',array(
     'methods' => 'POST',
-    'callback' => 'cwebco_upkepr_isKeyDomainUsernameValid'
+    'callback' => 'UPKPR_upkepr_isKeyDomainUsernameValid'
     )); 
 
     /* to get all wp information data */
     register_rest_route( 'upkepr-wpinfo', 'wpinfo',array(
     'methods' => 'POST',
-    'callback' => 'cwebco_upkepr_wpinfo'
+    'callback' => 'UPKPR_upkepr_wpinfo'
     ));  
 
     /* to generate a new token */
     register_rest_route( 'upkepr-gettoken', 'byusername',array(
     'methods' => 'POST',
-    'callback' => 'cwebco_upkepr_getlogintoken'
+    'callback' => 'UPKPR_upkepr_getlogintoken'
     ));
 
     /* to get login url */
     register_rest_route( 'upkepr-getloginurl', 'byusername',array(
     'methods' => 'POST',
-    'callback' => 'cwebco_upkepr_getloginurl'
+    'callback' => 'UPKPR_upkepr_getloginurl'
     ));
 
     /* internal api (not for app) */
     register_rest_route( 'upkepr-redirectnow', 'byusername',array(
     'methods' => 'GET',
-    'callback' => 'validate_token_and_allow_redirect'
+    'callback' => 'UPKPR_validate_token_and_allow_redirect'
     ));
 
 
 });
 
 
-if (!function_exists('cwebcoupkepr_getuserid_frm_username')){
-function cwebcoupkepr_getuserid_frm_username($username)
+if (!function_exists('UPKPR_upkepr_getuserid_frm_username')){
+function UPKPR_upkepr_getuserid_frm_username($username)
 {
     $username = sanitize_text_field($username);
     $user = get_user_by( 'email', $username );
@@ -195,25 +202,25 @@ function cwebcoupkepr_getuserid_frm_username($username)
 }
 }
 
-if (!function_exists('cwebco_upkepr_getlogintoken')){
-function cwebco_upkepr_getlogintoken()
+if (!function_exists('UPKPR_upkepr_getlogintoken')){
+function UPKPR_upkepr_getlogintoken()
 {
     $plugins_updates_array = array();
     $auth_header = apache_request_headers();
     $validationkey = $auth_header['Upkeprvalidationkey'];
     $upkeprvalidationdomain = $auth_header['Upkeprvalidationdomain'];
 
-    $validation_message = cwebco_upkepr_intrnl_func_verifyKeyDomainUsername();
+    $validation_message = UPKPR_upkepr_intrnl_func_verifyKeyDomainUsername();
     if( $validation_message === true ) // Key, Username and Domain Verified
     {
         $posted_datapost = json_decode( file_get_contents( 'php://input' ), true );
         $username = $posted_datapost['username'];
-        $user_id = cwebcoupkepr_getuserid_frm_username($username);
+        $user_id = UPKPR_upkepr_getuserid_frm_username($username);
         $headers = array('alg'=>'HS256','typ'=>'JWT');
         $payload = array('domain'=>$upkeprvalidationdomain,'validationkey'=>$validationkey, 'user_id'=>$user_id, 'exp'=>(time() + 30));
 
 
-        $resttoken = cwebco_upkepr_generaterandomtoken($headers, $payload, SECRET_KEY, $user_id);
+        $resttoken = UPKPR_upkepr_generaterandomtoken($headers, $payload, UPKPR_SECRET_KEY, $user_id);
 
         $data = array('status'=>'1','resttoken'=>$resttoken, 'username'=>$username);
         return new WP_REST_Response( $data, 200 );
@@ -228,15 +235,15 @@ function cwebco_upkepr_getlogintoken()
 }
 }
 
-if (!function_exists('cwebco_upkepr_generaterandomtoken')){
-function cwebco_upkepr_generaterandomtoken($headers, $payload, $secret = 'secret', $user_id)
+if (!function_exists('UPKPR_upkepr_generaterandomtoken')){
+function UPKPR_upkepr_generaterandomtoken($headers, $payload, $secret = 'secret', $user_id)
 {
-    $headers_encoded = base64url_encode(json_encode($headers));
+    $headers_encoded = UPKPR_base64url_encode(json_encode($headers));
     
-    $payload_encoded = base64url_encode(json_encode($payload));
+    $payload_encoded = UPKPR_base64url_encode(json_encode($payload));
     
-    $signature = hash_hmac(ALGORITHM, "$headers_encoded.$payload_encoded", SECRET_KEY, true);
-    $signature_encoded = base64url_encode($signature);
+    $signature = hash_hmac(UPKPR_ALGORITHM, "$headers_encoded.$payload_encoded", UPKPR_SECRET_KEY, true);
+    $signature_encoded = UPKPR_base64url_encode($signature);
     
     $jwt = "$headers_encoded.$payload_encoded.$signature_encoded";
     update_user_meta($user_id, 'upkprtkn', $jwt);
@@ -244,9 +251,9 @@ function cwebco_upkepr_generaterandomtoken($headers, $payload, $secret = 'secret
 }
 }
 
-if (!function_exists('get_bearer_token')){
-function get_bearer_token() {
-    $headers_data = get_authorization_header();
+if (!function_exists('UPKPR_get_bearer_token')){
+function UPKPR_get_bearer_token() {
+    $headers_data = UPKPR_get_authorization_header();
     $token_data = $headers_data['authorization'];
     
     // HEADER: Get the access token from the header
@@ -259,21 +266,21 @@ function get_bearer_token() {
 }
 }
 
-if (!function_exists('get_authorization_header')){
-function get_authorization_header(){
+if (!function_exists('UPKPR_get_authorization_header')){
+function UPKPR_get_authorization_header(){
     $headers = array();
     $authorization = null;
     $sent_validationkey = null;
     $sent_domainname = null;
 
     if (isset($_SERVER['Authorization'])) {
-        $authorization = trim($_SERVER["Authorization"]);
-        $sent_validationkey = trim($_SERVER["Upkeprvalidationkey"]);
-        $sent_domainname = trim($_SERVER["Upkeprvalidationdomain"]);
+        $authorization = trim(sanitize_text_field($_SERVER["Authorization"]));
+        $sent_validationkey = trim(sanitize_text_field($_SERVER["Upkeprvalidationkey"]));
+        $sent_domainname = trim(sanitize_text_field($_SERVER["Upkeprvalidationdomain"]));
     } else if (isset($_SERVER['HTTP_AUTHORIZATION'])) { //Nginx or fast CGI
-        $authorization      = trim($_SERVER["HTTP_AUTHORIZATION"]);
-        $sent_validationkey = trim($_SERVER["HTTP_UPKEPRVALIDATIONKEY"]);
-        $sent_domainname    = trim($_SERVER["HTTP_UPKEPRVALIDATIONDOMAIN"]);
+        $authorization      = trim(sanitize_text_field($_SERVER["HTTP_AUTHORIZATION"]));
+        $sent_validationkey = trim(sanitize_text_field($_SERVER["HTTP_UPKEPRVALIDATIONKEY"]));
+        $sent_domainname    = trim(sanitize_text_field($_SERVER["HTTP_UPKEPRVALIDATIONDOMAIN"]));
     } else if (function_exists('apache_request_headers')) {
         $requestHeaders = apache_request_headers();
         // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
@@ -290,8 +297,8 @@ function get_authorization_header(){
 }
 
 
-if (!function_exists('validate_token_and_allow_redirect')){
-function validate_token_and_allow_redirect()
+if (!function_exists('UPKPR_validate_token_and_allow_redirect')){
+function UPKPR_validate_token_and_allow_redirect()
 {
     $token_from_GET = sanitize_text_field($_GET['tkn']);
     $user_id = sanitize_text_field($_GET['usrid']); 
@@ -330,12 +337,12 @@ function validate_token_and_allow_redirect()
     {
         if($token_from_GET != $token_from_db)
         {
-            echo json_encode(array('error' => 'Token not mmatched'));
+            return json_encode(array('error' => 'Token not mmatched'));
         }
 
         if( (!empty($user_id) ) && ($user_id != '0'))
         {
-            echo json_encode(array('error' => 'UserId not matched'));
+            return json_encode(array('error' => 'UserId not matched'));
         }
     }
 
@@ -344,8 +351,8 @@ function validate_token_and_allow_redirect()
 }
 
 
-if (!function_exists('is_jwt_valid')){
-function is_jwt_valid($jwt, $secret = 'secret') {
+if (!function_exists('UPKPR_is_jwt_valid')){
+function UPKPR_is_jwt_valid($jwt, $secret = 'secret') {
     // split the jwt
     $tokenParts = explode('.', $jwt);
 
@@ -358,10 +365,10 @@ function is_jwt_valid($jwt, $secret = 'secret') {
     $is_token_expired = ($expiration - time()) < 0;
 
     // build a signature based on the header and payload using the secret
-    $base64_url_header = base64url_encode($header);
-    $base64_url_payload = base64url_encode($payload);
-    $signature = hash_hmac(ALGORITHM, $base64_url_header . "." . $base64_url_payload, SECRET_KEY, true);
-    $base64_url_signature = base64url_encode($signature);
+    $base64_url_header = UPKPR_base64url_encode($header);
+    $base64_url_payload = UPKPR_base64url_encode($payload);
+    $signature = hash_hmac(UPKPR_ALGORITHM, $base64_url_header . "." . $base64_url_payload, UPKPR_SECRET_KEY, true);
+    $base64_url_signature = UPKPR_base64url_encode($signature);
 
     // verify it matches the signature provided in the jwt
     $is_signature_valid = ($base64_url_signature === $signature_provided);
@@ -374,21 +381,21 @@ function is_jwt_valid($jwt, $secret = 'secret') {
 }
 }
 
-if (!function_exists('base64url_encode')){
-function base64url_encode($data) {
+if (!function_exists('UPKPR_base64url_encode')){
+function UPKPR_base64url_encode($data) {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 }
 }
 
 
-if (!function_exists('cwebco_upkepr_isKeyValid')){
-function cwebco_upkepr_isKeyValid()
+if (!function_exists('UPKPR_upkepr_isKeyValid')){
+function UPKPR_upkepr_isKeyValid()
 {
     $auth_header = apache_request_headers();
     $validationkey = $auth_header['Upkeprvalidationkey'];
     $upkeprvalidationdomain = $auth_header['Upkeprvalidationdomain'];
 
-    if( cwebco_upkepr_verifydomain($upkeprvalidationdomain) == false)
+    if( UPKPR_upkepr_verifydomain($upkeprvalidationdomain) == false)
     {
         $data = array('status'=>'0', 'message'=>'Domain not verified');
         return new WP_REST_Response( $data, 200 );
@@ -413,10 +420,10 @@ function cwebco_upkepr_isKeyValid()
 }
 }
 
-if (!function_exists('cwebco_upkepr_isKeyDomainUsernameValid')){
-function cwebco_upkepr_isKeyDomainUsernameValid()
+if (!function_exists('UPKPR_upkepr_isKeyDomainUsernameValid')){
+function UPKPR_upkepr_isKeyDomainUsernameValid()
 {
-    $validation_message = cwebco_upkepr_intrnl_func_verifyKeyDomainUsername();
+    $validation_message = UPKPR_upkepr_intrnl_func_verifyKeyDomainUsername();
     if( $validation_message === true )
     {
         $data = array('status'=>'1', 'message'=>'Key, Username and Domain Verified');
@@ -432,15 +439,15 @@ function cwebco_upkepr_isKeyDomainUsernameValid()
 }
 }
 
-if (!function_exists('cwebco_upkepr_intrnl_func_verifyKeyDomainUsername')){
-function cwebco_upkepr_intrnl_func_verifyKeyDomainUsername()
+if (!function_exists('UPKPR_upkepr_intrnl_func_verifyKeyDomainUsername')){
+function UPKPR_upkepr_intrnl_func_verifyKeyDomainUsername()
 {
 
     $auth_header = apache_request_headers();
     $validationkey = $auth_header['Upkeprvalidationkey'];
     $upkeprvalidationdomain = $auth_header['Upkeprvalidationdomain'];
 
-    if( cwebco_upkepr_verifydomain($upkeprvalidationdomain) == false)
+    if( UPKPR_upkepr_verifydomain($upkeprvalidationdomain) == false)
     {
         return 'Domain not verified';
         exit;
@@ -460,7 +467,7 @@ function cwebco_upkepr_intrnl_func_verifyKeyDomainUsername()
     $username = $posted_datapost['username'];
     
 
-    if( cwebco_upkepr_isuserexist($username) == false )
+    if( UPKPR_upkepr_isuserexist($username) == false )
     {
         return 'username not verified';
         exit;
@@ -472,8 +479,8 @@ function cwebco_upkepr_intrnl_func_verifyKeyDomainUsername()
 
 
 
-if (!function_exists('cwebco_upkepr_wpinfo')){
-function cwebco_upkepr_wpinfo()
+if (!function_exists('UPKPR_upkepr_wpinfo')){
+function UPKPR_upkepr_wpinfo()
 {
     if ( !function_exists( 'get_core_updates' ) ) { 
         require_once ABSPATH . '/wp-admin/includes/update.php'; 
@@ -485,7 +492,7 @@ function cwebco_upkepr_wpinfo()
     $validationkey = $auth_header['Upkeprvalidationkey'];
     $upkeprvalidationdomain = $auth_header['Upkeprvalidationdomain'];
 
-    if( cwebco_upkepr_verifydomain($upkeprvalidationdomain) == false)
+    if( UPKPR_upkepr_verifydomain($upkeprvalidationdomain) == false)
     {
         $data = array('status'=>'0', 'message'=>'Domain not verified');
         return new WP_REST_Response( $data, 200 );
@@ -523,14 +530,14 @@ function cwebco_upkepr_wpinfo()
         /* wp core check // */
 
         /* plugins upate check */
-        $plugin_info = cwebco_upkepr_cstm_plugins_update_check();
+        $plugin_info = UPKPR_upkepr_cstm_plugins_update_check();
         /* plugins upate check */
 
         /* plugins upate check */
-        $themes_info = cwebco_upkepr_cstm_theme_update_check();
+        $themes_info = UPKPR_upkepr_cstm_theme_update_check();
         /* plugins upate check */
 
-        $server = cwebco_upkepr_cstm_get_server_details();
+        $server = UPKPR_upkepr_cstm_get_server_details();
 
 
         $wordpress_info = array('old_version'=>$wp_core_currntversion, 'latest_virsion'=>$wp_core_updates_version);
@@ -552,8 +559,8 @@ function cwebco_upkepr_wpinfo()
 
 
 
-if (!function_exists('cwebco_upkepr_cstm_plugins_update_check')){
-function cwebco_upkepr_cstm_plugins_update_check() {
+if (!function_exists('UPKPR_upkepr_cstm_plugins_update_check')){
+function UPKPR_upkepr_cstm_plugins_update_check() {
     if (!function_exists('get_plugins')) {
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
     }
@@ -629,8 +636,8 @@ function cwebco_upkepr_cstm_plugins_update_check() {
 
 
 
-if (!function_exists('cwebco_upkepr_cstm_theme_update_check')){
-function cwebco_upkepr_cstm_theme_update_check()
+if (!function_exists('UPKPR_upkepr_cstm_theme_update_check')){
+function UPKPR_upkepr_cstm_theme_update_check()
 {
 
     if (!function_exists('get_themes')) {
@@ -726,12 +733,12 @@ function cwebco_upkepr_cstm_theme_update_check()
 }
 }
 
-if (!function_exists('cwebco_upkepr_cstm_get_server_details')){
-function cwebco_upkepr_cstm_get_server_details()
+if (!function_exists('UPKPR_upkepr_cstm_get_server_details')){
+function UPKPR_upkepr_cstm_get_server_details()
 {
     $server_details = array(
             'phpversion'    => phpversion(),
-            'HEADER'        => $_SERVER,
+            'HEADER'        => sanitize_text_field($_SERVER),
             'usage_memory'  => memory_get_usage( $real_usage = false),
             'usage_memory_details'  => 'Returns the amount of memory, in bytes, that is currently being allocated to your PHP script.',
             'mysql_version' => mysqli_get_client_info()
@@ -741,12 +748,12 @@ function cwebco_upkepr_cstm_get_server_details()
 }
 }
 
-if (!function_exists('cwebco_upkepr_getloginurl')){
-function cwebco_upkepr_getloginurl()
+if (!function_exists('UPKPR_upkepr_getloginurl')){
+function UPKPR_upkepr_getloginurl()
 {
-    $token = get_bearer_token();
+    $token = UPKPR_get_bearer_token();
 
-    $is_jwt_valid = is_jwt_valid($token);
+    $is_jwt_valid = UPKPR_is_jwt_valid($token);
     if(! $is_jwt_valid)
     {
         $data = array('status'=>'0', 'message'=>'Token not validated');
@@ -755,7 +762,7 @@ function cwebco_upkepr_getloginurl()
     }
 
 
-    $validation_message = cwebco_upkepr_intrnl_func_verifyKeyDomainUsername();
+    $validation_message = UPKPR_upkepr_intrnl_func_verifyKeyDomainUsername();
     
     if( $validation_message === true ) // Key, Username and Domain Verified
     {
@@ -786,7 +793,7 @@ function cwebco_upkepr_getloginurl()
                 }
 
 
-                $autologin_url = generate_login_url_with_token_userid($token, $user_id);
+                $autologin_url = UPKPR_generate_login_url_with_token_userid($token, $user_id);
 
                 $data = array('status'=>'1', 'autologin_url'=>$autologin_url);
                 return new WP_REST_Response( $data, 200 );
@@ -823,8 +830,8 @@ function cwebco_upkepr_getloginurl()
 }
 
 
-if (!function_exists('generate_login_url_with_token_userid')){
-function generate_login_url_with_token_userid($token, $user_id)
+if (!function_exists('UPKPR_generate_login_url_with_token_userid')){
+function UPKPR_generate_login_url_with_token_userid($token, $user_id)
 {
 
     $url = site_url().'/wp-json/upkepr-redirectnow/byusername/?usrid='.$user_id.'&tkn='.$token;
@@ -833,8 +840,8 @@ function generate_login_url_with_token_userid($token, $user_id)
 }
 }
 
-if (!function_exists('cwebco_upkepr_verifydomain')){
-function cwebco_upkepr_verifydomain($remote_domain)
+if (!function_exists('UPKPR_upkepr_verifydomain')){
+function UPKPR_upkepr_verifydomain($remote_domain)
 {
     $remote_domain = trim($remote_domain);
     $remote_domain = str_replace('\\', '', $remote_domain);
@@ -866,8 +873,8 @@ function cwebco_upkepr_verifydomain($remote_domain)
 }
 
 
-if (!function_exists('cwebco_upkepr_isuserexist')){
-function cwebco_upkepr_isuserexist($username)
+if (!function_exists('UPKPR_upkepr_isuserexist')){
+function UPKPR_upkepr_isuserexist($username)
 {
     $username = sanitize_text_field($username);
     $user = get_user_by( 'email', $username );

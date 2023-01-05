@@ -4,26 +4,27 @@ if(isset($_POST['cwebco_updatekey']))
 {
     if( wp_verify_nonce( $_POST['cwebcoupkeper_key_cstm_field'], 'cwebcoupkeper_key_cstm' ))
     {
-        cwebco_upkepr_regenerate_key();
+        UPKPR_upkepr_regenerate_key();
     }
 }
 
 $_upkepr_maintainance_validationkey = get_option('upkeprvalidationkeycstm' );
 $upkepr_admin_page = admin_url( "admin.php?page=upkepr-Maintenance" );
 ?>
-<link rel="stylesheet" href="<?php echo CWEB_UPKEPR_WS_PATH1; ?>css/style.css">
-<script src="<?php echo CWEB_UPKEPR_WS_PATH1; ?>js/jquery.min.js"></script>
+
+
 <div class="upkeprSettingMain">
     <div class="upkeprSettingBox">
         <div class="usMainTitle">Upkepr Setting</div>
         <div class="usMainSection">
             <div class="usmsLeft">
-                <img src="<?php echo CWEB_UPKEPR_WS_PATH1; ?>img/site-logo.png" class="logoMain" alt="upkepr logo">
+                <img src="<?php echo esc_html(UPKPR_UPKEPR_WS_PATH1); ?>img/site-logo.png" class="logoMain" alt="upkepr logo">
                 <h3>Authentication Key</h3>
-                <form action="<?php echo $upkepr_admin_page; ?>" method="post">
+                <form action="<?php echo esc_html($upkepr_admin_page); ?>" method="post">
                     <div class="usmsInput">
-                        <input type="text" id="upkepr_maintainance_validationkey" value="<?php if(isset($_upkepr_maintainance_validationkey)){echo esc_html($_upkepr_maintainance_validationkey);}?>">
-                        <div class="usmsCopyIcon"><img src="<?php echo CWEB_UPKEPR_WS_PATH1; ?>img/copy.png" alt="upkepr" onclick="cwebco_copykey()"></div>
+                        <input type="text" id="upkepr_maintainance_validationkey" value="<?php if(isset($_upkepr_maintainance_validationkey)){ 
+                            echo esc_html($_upkepr_maintainance_validationkey);}?>">
+                        <div class="usmsCopyIcon"><img src="<?php echo esc_html(UPKPR_UPKEPR_WS_PATH1); ?>img/copy.png" alt="upkepr" onclick="UPKPR_copykey()"></div>
                         <div class="cstm_messagebox">Key copied</div>
                         <span class="usmsHelpText">Copy the key & Use in upkepr</span>
                         
@@ -94,19 +95,17 @@ $upkepr_admin_page = admin_url( "admin.php?page=upkepr-Maintenance" );
 
 
 <script type="text/javascript">
-    if (!function_exists('cwebco_copykey')){
-    function cwebco_copykey() {
+  
+    function UPKPR_copykey() {
         var copyText = document.getElementById("upkepr_maintainance_validationkey");
         copyText.select();
         copyText.setSelectionRange(0, 99999); /* For mobile devices */
         navigator.clipboard.writeText(copyText.value);
         //alert("Key Copied");
         jQuery(".cstm_messagebox").toggle();
-
-
         setTimeout(function() {
             jQuery(".cstm_messagebox").toggle();
           }, 2000);
     }
-}
+
 </script>
