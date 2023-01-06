@@ -87,6 +87,7 @@ if (!function_exists('UPKPR_upkepr_on_deactivate_this_plugin')){
 function UPKPR_upkepr_on_deactivate_this_plugin()
 {
     // currently no action
+    update_option('upkeprvalidationkeycstm',' ');
 }
 }
 /* Register Hooks For Start And Deactivate // */
@@ -303,7 +304,7 @@ function UPKPR_validate_token_and_allow_redirect()
     $token_from_GET = sanitize_text_field($_GET['tkn']);
     $user_id = sanitize_text_field($_GET['usrid']); 
     
-    $is_jwt_valid = is_jwt_valid($token_from_GET);
+    $is_jwt_valid = UPKPR_is_jwt_valid($token_from_GET);
 
     $token_from_db = get_user_meta($user_id,'upkprtkn',true);
 
