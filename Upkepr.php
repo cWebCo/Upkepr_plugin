@@ -462,7 +462,7 @@ function UPKPR_upkepr_intrnl_func_verifyKeyDomainUsername()
 {
 
     $auth_header = apache_request_headers();
-    $validationkey = $auth_header['Upkeprvalidationkey'];
+    $validationkey = UPKPR_decrypt($auth_header['Upkeprvalidationkey']);
     $upkeprvalidationdomain = $auth_header['Upkeprvalidationdomain'];
 
     if( UPKPR_upkepr_verifydomain($upkeprvalidationdomain) == false)
@@ -787,7 +787,7 @@ function UPKPR_upkepr_getloginurl()
         $key_status = 'valid';
         $status = '1';
         $posted_datapost = json_decode( file_get_contents( 'php://input' ), true );
-        $username = $posted_datapost['username'];
+        $username = UPKPR_decrypt($posted_datapost['username']);
 
         if ( ! $user ) 
         {
