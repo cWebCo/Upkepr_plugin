@@ -26,6 +26,11 @@ define('UPKPR_SECRET_KEY','upKeprSecret');  // secret key can be a random string
 define('UPKPR_ALGORITHM','SHA256');
 define( 'UPKPR_LICENSE', true );
 
+define('UPKPR_ENCODE_DECODE_CIPHERING','AES-128-CTR');
+define('UPKPR_ENCODE_DECODE_OPTIONS',0);
+define('UPKPR_ENCODE_DECODE_IV','1234567891011121');
+define('UPKPR_ENCODE_DECODE_KEY','UPKKPERENCRYPTION');
+
 /* Use Domain as the folder name */
 $PluginTextDomain="upkepr-maintenance";
 
@@ -44,6 +49,18 @@ function UPKPR_wpdocs_enqueue_custom_admin_style() {
         wp_enqueue_style( 'custom_wp_admin_css' );
 }
 add_action( 'admin_enqueue_scripts', 'UPKPR_wpdocs_enqueue_custom_admin_style' );
+
+if (!function_exists('UPKPR_encrypt')){
+    function UPKPR_encrypt($string) {
+    return openssl_encrypt($string, UPKPR_ENCODE_DECODE_CIPHERING, UPKPR_ENCODE_DECODE_KEY, UPKPR_ENCODE_DECODE_OPTIONS, UPKPR_ENCODE_DECODE_IV);
+    }
+}
+    /***********************Decrypt encrypted string by iwt_encode********************************/
+    if (!function_exists('UPKPR_decrypt')){
+ function UPKPR_decrypt($string) {
+return openssl_decrypt($string, UPKPR_ENCODE_DECODE_CIPHERING, UPKPR_ENCODE_DECODE_KEY, UPKPR_ENCODE_DECODE_OPTIONS, UPKPR_ENCODE_DECODE_IV);
+}
+}
 
 if (!function_exists('UPKPR_upkepr_on_activate_this_plugin')){
 function UPKPR_upkepr_on_activate_this_plugin()
