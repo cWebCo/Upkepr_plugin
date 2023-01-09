@@ -232,15 +232,16 @@ function UPKPR_upkepr_getlogintoken()
     if( $validation_message === true ) // Key, Username and Domain Verified
     {
         $posted_datapost = json_decode( file_get_contents( 'php://input' ), true );
-        $username = $posted_datapost['username'];
+       // $username = $posted_datapost['username'];
+        $username = UPKPR_decrypt($posted_datapost['username']);
         $user_id = UPKPR_upkepr_getuserid_frm_username($username);
         $headers = array('alg'=>'HS256','typ'=>'JWT');
         $payload = array('domain'=>$upkeprvalidationdomain,'validationkey'=>$validationkey, 'user_id'=>$user_id, 'exp'=>(time() + 30));
 
 
         $resttoken = UPKPR_upkepr_generaterandomtoken($headers, $payload, UPKPR_SECRET_KEY, $user_id);
-
-        $data = array('status'=>'1','resttoken'=>$resttoken, 'username'=>$username);
+              $resttoken_encrypt= UPKPR_encrypt($resttoken);
+        $data = array('status'=>'1','resttoken'=>$resttoken_encrypt, 'username'=>$username);
         return new WP_REST_Response( $data, 200 );
 
 
@@ -482,7 +483,8 @@ function UPKPR_upkepr_intrnl_func_verifyKeyDomainUsername()
 
 
     $posted_datapost = json_decode( file_get_contents( 'php://input' ), true );
-    $username = $posted_datapost['username'];
+    //$username = $posted_datapost['username'];
+    $username = UPKPR_decrypt($posted_datapost['username']);
     
 
     if( UPKPR_upkepr_isuserexist($username) == false )
@@ -507,7 +509,8 @@ function UPKPR_upkepr_wpinfo()
 
     $plugins_updates_array = array();
     $auth_header = apache_request_headers();
-    $validationkey = $auth_header['Upkeprvalidationkey'];
+   // $validationkey = $auth_header['Upkeprvalidationkey'];
+     $validationkey = UPKPR_decrypt($auth_header['Upkeprvalidationkey']);
     $upkeprvalidationdomain = $auth_header['Upkeprvalidationdomain'];
 
     if( UPKPR_upkepr_verifydomain($upkeprvalidationdomain) == false)
@@ -812,8 +815,8 @@ function UPKPR_upkepr_getloginurl()
 
 
                 $autologin_url = UPKPR_generate_login_url_with_token_userid($token, $user_id);
-
-                $data = array('status'=>'1', 'autologin_url'=>$autologin_url);
+                    $autologin_url_encrypt  =UPKPR_encrypt($autologin_url);
+                $data = array('status'=>'1', 'autologin_url'=>$autologin_url_encrypt);
                 return new WP_REST_Response( $data, 200 );
                 exit;
 
